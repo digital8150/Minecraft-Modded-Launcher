@@ -1,0 +1,34 @@
+﻿<Window x:Class="Minecraft_Modded_Launcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Minecraft_Modded_Launcher"
+        xmlns:viewModels="clr-namespace:Minecraft_Modded_Launcher.ViewModels"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.DataContext>
+        <viewModels:MainViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <Button Content="Forge 설치" Command="{Binding InstallForgeCommand}" Margin="5"/>
+            <Button Content="모드팩 설치" Command="{Binding InstallModpackCommand}" Margin="5"/>
+            <Button Content="마인크래프트 실행" Command="{Binding LaunchMinecraftCommand}" Margin="5"/>
+            <Button Content="설정"  Margin="5"/>
+        </StackPanel>
+
+        <hc:ScrollViewer Grid.Row="1" Margin="10">
+            <TextBlock Text="{Binding LogText}" TextWrapping="Wrap"/>
+        </hc:ScrollViewer>
+
+        <ProgressBar Grid.Row="2" Height="10" Margin="10" Value="{Binding ProgressValue}" Maximum="100"/>
+    </Grid>
+</Window>
