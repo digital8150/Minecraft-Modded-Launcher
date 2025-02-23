@@ -21,6 +21,7 @@ namespace Minecraft_Modded_Launcher.Views
     /// </summary>
     public partial class MainApplication : Window
     {
+        private const int MillisecondsDelay = 125;
         private AnimationController animationController = new AnimationController();
 
         public MainApplication()
@@ -41,20 +42,24 @@ namespace Minecraft_Modded_Launcher.Views
             animationController.BeginAnimation(mainborder, 0, 1, OpacityProperty, 0.5, System.Windows.Media.Animation.EasingMode.EaseOut, new QuarticEase());
             await Task.Delay(700);
             animationController.BeginAnimation(applicationLogo, 0, 1, OpacityProperty, 0.5);
-            await Task.Delay(250);
+            await Task.Delay(MillisecondsDelay);
             animationController.BeginAnimation(borderMinecraftStatus, 0, 1, OpacityProperty, 0.5);
-            await Task.Delay(250);
+            await Task.Delay(MillisecondsDelay);
             animationController.BeginAnimation(borderProfileStatus, 0, 1, OpacityProperty, 0.5);
-            await Task.Delay(250);
+            await Task.Delay(MillisecondsDelay);
             animationController.BeginAnimation(buttonInstall, 0, 1, OpacityProperty, 0.5);
-            await Task.Delay(250);
+            await Task.Delay(MillisecondsDelay);
             animationController.BeginAnimation(carouselMain, 0, 1, OpacityProperty, 0.5);
-            await Task.Delay(250);
+            await Task.Delay(MillisecondsDelay);
         }
 
         private void installModpack(object sender, RoutedEventArgs e)
         {
-            HandyControl.Controls.MessageBox.Show("Test!");
+            Button button = (Button)sender;
+            button.IsEnabled = false;
+
+            Installer installer = new Installer();
+            installer.Show();
         }
     }
 }

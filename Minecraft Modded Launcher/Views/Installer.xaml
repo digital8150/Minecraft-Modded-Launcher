@@ -1,0 +1,77 @@
+﻿<Window x:Class="Minecraft_Modded_Launcher.Views.Installer"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Minecraft_Modded_Launcher.Views"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:fa="http://schemas.fontawesome.com/icons/fonts"
+        mc:Ignorable="d"
+        Title="MCROHDONG 모드설치기" Height="650" Width="450"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        Loaded="window_loaded">
+    <Border Background="#fcf9fa" CornerRadius="15" Name="borderApplicaion">
+        <Grid>
+            <StackPanel>
+                <Border Name="borderMinecraftBackup" Height="100" Margin="25,25.5,25,12" Background="#fafafa" CornerRadius="15">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" BlurRadius="25" Opacity="0.6"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <fa:FontAwesome Name="spinnerMinecraftBackup" Icon="Solid_Spinner" VerticalAlignment="Center" FontSize="24" Spin="True"/>
+                        <TextBlock Grid.Column="1" Margin="15" Foreground="#2a2a2a" VerticalAlignment="Center" TextAlignment="Left" FontFamily="/Font/#Pretendard Variable" FontSize="14" FontWeight="Medium" RenderOptions.BitmapScalingMode="Fant">
+                                <Run FontFamily="/Font/#G마켓 산스 TTF Bold" FontSize="16">기존 마인크래프트 폴더 백업</Run><LineBreak/>
+                                기존 마인크래프트 환경을 백업합니다.
+                        </TextBlock>
+                    </Grid>
+                </Border>
+                <Border Name="borderMinecraftInstall" Height="100" Margin="25,25.5,25,12" Background="#fafafa" CornerRadius="15">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" BlurRadius="25" Opacity="0.6"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <fa:FontAwesome Name="spinnerMinecraftInstall" Icon="Solid_Spinner" VerticalAlignment="Center" FontSize="24" Spin="True"/>
+                        <TextBlock Grid.Column="1" Margin="15" Foreground="#2a2a2a" VerticalAlignment="Center" TextAlignment="Left" FontFamily="/Font/#Pretendard Variable" FontSize="14" FontWeight="Medium" RenderOptions.BitmapScalingMode="Fant">
+                                <Run FontFamily="/Font/#G마켓 산스 TTF Bold" FontSize="16">리빌드 1.12 설치</Run><LineBreak/>
+                                리빌드 1.12 모드팩을 설치합니다.
+                        </TextBlock>
+                    </Grid>
+                </Border>
+                <Border Name="borderJavaInstall" Height="100" Margin="25,25.5,25,12" Background="#fafafa" CornerRadius="15">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" BlurRadius="25" Opacity="0.6"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <fa:FontAwesome Name="spinnerJavaInstall" Icon="Solid_Spinner" VerticalAlignment="Center" FontSize="24" Spin="True"/>
+                        <TextBlock Grid.Column="1" Margin="15" Foreground="#2a2a2a" VerticalAlignment="Center" TextAlignment="Left" FontFamily="/Font/#Pretendard Variable" FontSize="14" FontWeight="Medium" RenderOptions.BitmapScalingMode="Fant">
+                                <Run FontFamily="/Font/#G마켓 산스 TTF Bold" FontSize="16">Java8 런타임 설치</Run><LineBreak/>
+                                원활한 실행을 위해 OpenJDK 1.8을 설치합니다.
+                        </TextBlock>
+                    </Grid>
+                </Border>
+            </StackPanel>
+
+            <Button Name="buttonExit" Opacity="0" IsEnabled="False" VerticalAlignment="Bottom" Margin="15" HorizontalAlignment="Stretch" Height="50" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}" FontSize="16" FontFamily="/Font/#G마켓 산스 TTF Medium" Click="closeInstaller">
+                <Button.Effect>
+                    <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" BlurRadius="25" Opacity="0.6"/>
+                </Button.Effect>
+                확인
+            </Button>
+        </Grid>
+    </Border>
+</Window>
