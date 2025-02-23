@@ -1,0 +1,105 @@
+﻿<Window x:Class="Minecraft_Modded_Launcher.Views.MainApplication"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Minecraft_Modded_Launcher.Views"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:fa="http://schemas.fontawesome.com/icons/fonts"
+        mc:Ignorable="d"
+        Title="Init" Height="720" Width="1280"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        Background="Transparent"
+        Loaded="window_loaded">
+    <Border Name="mainborder" Background="#f1eff1" CornerRadius="15">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="720"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <StackPanel Margin="15" VerticalAlignment="Top">
+                    <Image Name="applicationLogo" Source="/Resources/mcrohdong.png" RenderOptions.BitmapScalingMode="Fant" VerticalAlignment="Top" Height="150">
+                        <Image.Effect>
+                            <DropShadowEffect Color="#FFA5A5A5" Opacity="1" ShadowDepth="0"/>
+                        </Image.Effect>
+                    </Image>
+
+                    <Border Name="borderMinecraftStatus" Height="100" Margin="25,25.5,25,12" Background="#fafafa" CornerRadius="15">
+                        <Border.Effect>
+                            <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" BlurRadius="25" Opacity="0.6"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="/Resources/mc.png" RenderOptions.BitmapScalingMode="Fant" Margin="15" />
+                            <TextBlock Grid.Column="1" Margin="15" Foreground="#2a2a2a" VerticalAlignment="Center" TextAlignment="Left" FontFamily="/Font/#Pretendard Variable" FontSize="14" FontWeight="Medium" RenderOptions.BitmapScalingMode="Fant">
+                                <Run FontFamily="/Font/#G마켓 산스 TTF Bold" FontSize="16">Minecraft 설치 상태</Run><LineBreak/>
+                                불러오는 중...
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+
+                    <Border Name="borderProfileStatus" Height="100" Margin="25,0" Background="#fafafa" CornerRadius="15">
+                        <Border.Effect>
+                            <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" BlurRadius="25" Opacity="0.6"/>
+                        </Border.Effect>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="/Resources/forge.png" RenderOptions.BitmapScalingMode="Fant" Margin="15" />
+                            <TextBlock Grid.Column="1" Margin="15" Foreground="#2a2a2a" VerticalAlignment="Center" TextAlignment="Left" FontFamily="/Font/#Pretendard Variable" FontSize="14" FontWeight="Medium" RenderOptions.BitmapScalingMode="Fant">
+                                <Run FontFamily="/Font/#G마켓 산스 TTF Bold" FontSize="16">MCROHDONG 프로필 설치 상태</Run><LineBreak/>
+                                불러오는 중...
+                            </TextBlock>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+
+                <Button Name="buttonInstall" VerticalAlignment="Bottom" Margin="35" Height="75" HorizontalAlignment="Stretch" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}" Click="installModpack">
+                    <Button.Effect>
+                        <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" BlurRadius="25" Opacity="0.6"/>
+                    </Button.Effect>
+                    <TextBlock FontFamily="/Font/#G마켓 산스 TTF Bold" FontSize="24">
+                        <fa:FontAwesome Icon="Solid_WandMagicSparkles"/> 리빌드 모드팩 설치하기
+                    </TextBlock>
+                </Button>
+
+            </Grid>
+            
+            <Grid Grid.Column="1">
+                <hc:Carousel Name="carouselMain" Margin="15" hc:BorderElement.CornerRadius="15">
+                    <hc:CarouselItem>
+                        <Border Width="690" CornerRadius="15" Margin="0,0,15,0">
+                            <Border.Background>
+                                <ImageBrush ImageSource="/Resources/bg1.jpg" RenderOptions.BitmapScalingMode="Fant"/>
+                            </Border.Background>
+                        </Border>
+                    </hc:CarouselItem>
+                    <hc:CarouselItem>
+                        <Border Width="690" CornerRadius="15" Margin="0,0,15,0">
+                            <Border.Background>
+                                <ImageBrush ImageSource="/Resources/bg2.jpg" RenderOptions.BitmapScalingMode="Fant"/>
+                            </Border.Background>
+                        </Border>
+                    </hc:CarouselItem>
+                    <hc:CarouselItem>
+                        <Border Width="690" CornerRadius="15">
+                            <Border.Background>
+                                <ImageBrush ImageSource="/Resources/bg3.jpg" RenderOptions.BitmapScalingMode="Fant"/>
+                            </Border.Background>
+                        </Border>
+                    </hc:CarouselItem>
+                </hc:Carousel>
+            </Grid>
+            
+        </Grid>
+    </Border>
+</Window>

@@ -10,12 +10,47 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HandyControls" Version="3.5.3" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <None Remove="Font\GmarketSansTTFBold.ttf" />
+    <None Remove="Font\GmarketSansTTFLight.ttf" />
+    <None Remove="Font\GmarketSansTTFMedium.ttf" />
+    <None Remove="Font\PretendardVariable.ttf" />
+    <None Remove="Resources\bg1.jpg" />
+    <None Remove="Resources\bg2.jpg" />
+    <None Remove="Resources\forge.png" />
+    <None Remove="Resources\mc.png" />
+    <None Remove="Resources\mcrohdong.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Resource Include="Font\GmarketSansTTFBold.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Font\GmarketSansTTFLight.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Font\GmarketSansTTFMedium.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Font\PretendardVariable.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\bg1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\bg2.jpg" />
+    <Resource Include="Resources\bg3.jpg" />
+    <Resource Include="Resources\forge.png" />
+    <Resource Include="Resources\mc.png" />
+    <Resource Include="Resources\mcrohdong.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FontAwesome6.Fonts" Version="2.5.1" />
+    <PackageReference Include="HandyControls" Version="3.5.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
 </Project>
