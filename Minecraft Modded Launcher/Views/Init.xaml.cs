@@ -22,7 +22,7 @@ namespace Minecraft_Modded_Launcher.Views
     public partial class Init : Window
     {
         private AnimationController animationController = new AnimationController();
-        public MainApplication application = new MainApplication();
+        public static MainApplication application = new MainApplication();
 
         public Init()
         {

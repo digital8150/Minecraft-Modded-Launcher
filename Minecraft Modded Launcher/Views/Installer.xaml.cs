@@ -42,26 +42,40 @@ namespace Minecraft_Modded_Launcher.Views
             animationController.BeginAnimation(borderApplicaion, 0, 1, OpacityProperty);
             await Task.Delay(1000);
             
-            backupMinecraftFolder();
+            await backupMinecraftFolder();
             spinnerMinecraftBackup.Icon = FontAwesome6.EFontAwesomeIcon.Regular_CircleCheck;
             spinnerMinecraftBackup.Spin = false;
+            spinnerMinecraftBackup.Foreground = Brushes.Green;
+            await installRebuild();
+            spinnerMinecraftInstall.Icon = FontAwesome6.EFontAwesomeIcon.Regular_CircleCheck;
+            spinnerMinecraftInstall.Spin = false;
+            spinnerMinecraftInstall.Foreground = Brushes.Green;
+            await instalJDK8();
+            spinnerJavaInstall.Icon = FontAwesome6.EFontAwesomeIcon.Regular_CircleCheck;
+            spinnerJavaInstall.Spin = false;
+            spinnerJavaInstall.Foreground = Brushes.Green;
 
-
+            buttonExit.IsEnabled = true;
+            buttonExit.Visibility = Visibility.Visible;
+            animationController.BeginAnimation(buttonExit, 0, 1, OpacityProperty);
+            Init.application.isMcrohdongInstalled = true;
+            Init.application.updateButtonState();
         }
 
 
-        private void backupMinecraftFolder()
+        private async Task backupMinecraftFolder()
         {
             try
             {
                 // 1. .minecraft 폴더 경로 설정
                 string minecraftFolderPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".minecraft");
+                string backupFolderPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".minecraft_backup");
 
                 // 2. .minecraft 폴더가 존재하는지 확인
                 if (Directory.Exists(minecraftFolderPath))
                 {
                     // 3. 백업 폴더 경로 설정 (.minecraft_backup)
-                    string backupFolderPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".minecraft_backup");
+                    
 
                     // 4. 이미 .minecraft_backup 폴더가 존재하면 삭제 (덮어쓰기)
                     if (Directory.Exists(backupFolderPath))
@@ -77,6 +91,7 @@ namespace Minecraft_Modded_Launcher.Views
                 else
                 {
                     HandyControl.Controls.MessageBox.Show("마인크래프트 폴더가 존재하지 않으므로 백업 하지 않습니다.");
+                    Directory.CreateDirectory(backupFolderPath);
                 }
             }
             catch (Exception ex)
@@ -86,7 +101,7 @@ namespace Minecraft_Modded_Launcher.Views
             }
         }
 
-        private async void installRebuild()
+        private async Task installRebuild()
         {
             string minecraftFolderPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".minecraft");
 
@@ -142,7 +157,7 @@ namespace Minecraft_Modded_Launcher.Views
                     File.Delete(tempZipPath);
 
                     // LogText += "Re:Build 파일 설치 완료!\n"; // 제거
-                    HandyControl.Controls.MessageBox.Show("Re:Build 파일 설치가 완료되었습니다.", "완료", MessageBoxButton.OK, MessageBoxImage.Information); // 완료 메시지
+                    HandyControl.Controls.Growl.Info("Re:Build 파일 설치가 완료되었습니다."); // 완료 메시지
                 }
                 catch (Exception ex)
                 {
@@ -165,7 +180,7 @@ namespace Minecraft_Modded_Launcher.Views
         }
 
         
-        private async void instalJDK8()
+        private async Task instalJDK8()
         {
             try
             {
@@ -249,7 +264,7 @@ namespace Minecraft_Modded_Launcher.Views
                     return;
                 }
 
-                MessageBox.Show("JDK8 설치 및 설정이 완료되었습니다.", "완료", MessageBoxButton.OK, MessageBoxImage.Information);
+                HandyControl.Controls.Growl.Info("JDK8 설치 및 설정이 완료되었습니다.");
             }
             catch (Exception ex)
             {

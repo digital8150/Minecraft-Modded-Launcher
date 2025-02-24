@@ -15,12 +15,30 @@
         Loaded="window_loaded">
     <Border Name="mainborder" Background="#f1eff1" CornerRadius="15">
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="720"/>
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0">
+            <Border Grid.ColumnSpan="2" Background="#f1eff1" MouseDown="borderDragMove" CornerRadius="15"/>
+            <TextBlock Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="/Font/#Pretendard Variable Medium" FontSize="14" MouseDown="borderDragMove">
+                MCROHDONG Re:Build 간편 설치 마법사
+            </TextBlock>
+            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Grid.RowSpan="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="15,5" >
+                <Button  Background="#ee3c3c" Height="15" Width="15" hc:BorderElement.CornerRadius="15" BorderBrush="Transparent" Click="closeApp"/>
+                <Button  Background="#FFD4B62A" Height="15" Width="15" hc:BorderElement.CornerRadius="15" BorderBrush="Transparent"  Margin="5,0"/>
+                <Button  Background="#FF2Aee2A" Height="15" Width="15" hc:BorderElement.CornerRadius="15" BorderBrush="Transparent"  />
+                <StackPanel.Effect>
+                    <DropShadowEffect Color="#FFA5A5A5" Opacity="1" ShadowDepth="0"/>
+                </StackPanel.Effect>
+            </StackPanel>
+
+
+            <Grid Grid.Column="0" Grid.Row="1">
                 <StackPanel Margin="15" VerticalAlignment="Top">
                     <Image Name="applicationLogo" Source="/Resources/mcrohdong.png" RenderOptions.BitmapScalingMode="Fant" VerticalAlignment="Top" Height="150">
                         <Image.Effect>
@@ -40,7 +58,7 @@
                             <Image Source="/Resources/mc.png" RenderOptions.BitmapScalingMode="Fant" Margin="15" />
                             <TextBlock Grid.Column="1" Margin="15" Foreground="#2a2a2a" VerticalAlignment="Center" TextAlignment="Left" FontFamily="/Font/#Pretendard Variable" FontSize="14" FontWeight="Medium" RenderOptions.BitmapScalingMode="Fant">
                                 <Run FontFamily="/Font/#G마켓 산스 TTF Bold" FontSize="16">Minecraft 설치 상태</Run><LineBreak/>
-                                불러오는 중...
+                                <Run Name="textMinecraftStatus">불러오는 중...</Run>
                             </TextBlock>
                         </Grid>
                     </Border>
@@ -57,7 +75,7 @@
                             <Image Source="/Resources/forge.png" RenderOptions.BitmapScalingMode="Fant" Margin="15" />
                             <TextBlock Grid.Column="1" Margin="15" Foreground="#2a2a2a" VerticalAlignment="Center" TextAlignment="Left" FontFamily="/Font/#Pretendard Variable" FontSize="14" FontWeight="Medium" RenderOptions.BitmapScalingMode="Fant">
                                 <Run FontFamily="/Font/#G마켓 산스 TTF Bold" FontSize="16">MCROHDONG 프로필 설치 상태</Run><LineBreak/>
-                                불러오는 중...
+                                <Run Name="textBackupStatus">불러오는 중...</Run>
                             </TextBlock>
                         </Grid>
                     </Border>
@@ -71,7 +89,7 @@
                         <fa:FontAwesome Icon="Solid_WandMagicSparkles"/> 리빌드 모드팩 설치하기
                     </TextBlock>
                 </Button>
-                <Button Name="buttonRevoke" Visibility="Collapsed" VerticalAlignment="Bottom" Margin="35" Height="75" HorizontalAlignment="Stretch" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonWarning}" Click="installModpack">
+                <Button Name="buttonRevoke" Visibility="Collapsed" VerticalAlignment="Bottom" Margin="35" Height="75" HorizontalAlignment="Stretch" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonWarning}" Click="revokeModpack">
                     <Button.Effect>
                         <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" BlurRadius="25" Opacity="0.6"/>
                     </Button.Effect>
@@ -82,7 +100,7 @@
 
             </Grid>
             
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="1" Grid.Row="1">
                 <hc:Carousel Name="carouselMain" Margin="15" hc:BorderElement.CornerRadius="15">
                     <hc:CarouselItem>
                         <Border Width="690" CornerRadius="15" Margin="0,0,15,0">
