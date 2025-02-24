@@ -1,4 +1,5 @@
 ﻿using Minecraft_Modded_Launcher.Controllers;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -163,10 +164,97 @@ namespace Minecraft_Modded_Launcher.Views
             }
         }
 
-        //TODO : JDK8 설치 구현
+        
         private async void instalJDK8()
         {
+            try
+            {
+                // 1. JDK8 다운로드
+                string jdkDownloadUrl = "http://mc2.codingbot.kr/mc2/java8.zip";
+                string tempZipPath = Path.Combine(Path.GetTempPath(), "java8.zip");
+                string extractionPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location); // 실행 파일 위치
 
+                
+
+                using (var client = new HttpClient())
+                {
+                    client.Timeout = TimeSpan.FromMinutes(5); // 타임아웃 설정
+
+                    using (var response = await client.GetAsync(jdkDownloadUrl, HttpCompletionOption.ResponseHeadersRead))
+                    {
+                        response.EnsureSuccessStatusCode();
+
+                        long? totalBytes = response.Content.Headers.ContentLength;
+
+                        using (var contentStream = await response.Content.ReadAsStreamAsync())
+                        using (var fileStream = new FileStream(tempZipPath, FileMode.Create, FileAccess.Write, FileShare.None))
+                        {
+                            var buffer = new byte[8192];
+                            long downloadedBytes = 0;
+                            int bytesRead;
+
+                            while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                            {
+                                await fileStream.WriteAsync(buffer, 0, bytesRead);
+                                downloadedBytes += bytesRead;
+
+                                if (totalBytes.HasValue)
+                                {
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // 2. JDK8 압축 해제 (실행 파일 위치에)
+                await Task.Run(() => ZipFile.ExtractToDirectory(tempZipPath, extractionPath, true)); // 기존 파일 덮어쓰기
+                File.Delete(tempZipPath); // 임시 zip 파일 삭제
+
+                // 3. launcher_profiles.json 파일 수정
+                string launcherProfilesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ".minecraft", "launcher_profiles.json");
+
+                if (File.Exists(launcherProfilesPath))
+                {
+                    string json = File.ReadAllText(launcherProfilesPath);
+                    JObject launcherProfiles = JObject.Parse(json);
+
+                    // "profiles" 객체 가져오기
+                    JObject profiles = (JObject)launcherProfiles["profiles"];
+
+                    if (profiles != null)  // profiles 가 null 인 경우 예외처리.
+                    {
+                        // 모든 프로필 순회
+                        foreach (var profile in profiles.Properties())
+                        {
+                            JObject profileObject = (JObject)profile.Value;
+
+                            // "javaDir" 속성 수정
+                            if (profileObject.ContainsKey("javaDir"))
+                            {
+                                // javaDir 경로 수정.  "java-se-8u41-ri" 폴더가 실행 파일 위치에 있다고 가정.
+                                profileObject["javaDir"] = Path.Combine(extractionPath, "java-se-8u41-ri", "bin", "javaw.exe");
+                            }
+                        }
+
+                        // 수정된 JSON 파일 저장
+                        string updatedJson = launcherProfiles.ToString(Newtonsoft.Json.Formatting.Indented); // 보기 좋게 들여쓰기
+                        File.WriteAllText(launcherProfilesPath, updatedJson);
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show("launcher_profiles.json 파일을 찾을 수 없습니다.", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                MessageBox.Show("JDK8 설치 및 설정이 완료되었습니다.", "완료", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"JDK8 설치 중 오류 발생: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
