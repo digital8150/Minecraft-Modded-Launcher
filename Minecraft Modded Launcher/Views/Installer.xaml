@@ -7,7 +7,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:fa="http://schemas.fontawesome.com/icons/fonts"
         mc:Ignorable="d"
-        Title="MCROHDONG 모드설치기" Height="650" Width="450"
+        Title="MCROHDONG 모드설치기" Height="550" Width="1000"
         WindowStyle="None"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
@@ -15,8 +15,13 @@
         Loaded="window_loaded">
     <Border Background="#fcf9fa" CornerRadius="15" Name="borderApplicaion">
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="450"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
             <StackPanel>
-                <Border Name="borderMinecraftBackup" Height="100" Margin="25,25.5,25,12" Background="#fafafa" CornerRadius="15">
+                <Border Name="borderMinecraftBackup" Height="100" Margin="25,25.5,25,5" Background="#fafafa" CornerRadius="15">
                     <Border.Effect>
                         <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" BlurRadius="25" Opacity="0.6"/>
                     </Border.Effect>
@@ -32,7 +37,7 @@
                         </TextBlock>
                     </Grid>
                 </Border>
-                <Border Name="borderMinecraftInstall" Height="100" Margin="25,25.5,25,12" Background="#fafafa" CornerRadius="15">
+                <Border Name="borderMinecraftInstall" Height="100" Margin="25,5,25,5" Background="#fafafa" CornerRadius="15">
                     <Border.Effect>
                         <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" BlurRadius="25" Opacity="0.6"/>
                     </Border.Effect>
@@ -48,7 +53,7 @@
                         </TextBlock>
                     </Grid>
                 </Border>
-                <Border Name="borderJavaInstall" Height="100" Margin="25,25.5,25,12" Background="#fafafa" CornerRadius="15">
+                <Border Name="borderJavaInstall" Height="100" Margin="25,5,25,0" Background="#fafafa" CornerRadius="15">
                     <Border.Effect>
                         <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" BlurRadius="25" Opacity="0.6"/>
                     </Border.Effect>
@@ -66,12 +71,37 @@
                 </Border>
             </StackPanel>
 
+            
             <Button Name="buttonExit" Opacity="0" IsEnabled="False" VerticalAlignment="Bottom" Margin="15" HorizontalAlignment="Stretch" Height="50" hc:BorderElement.CornerRadius="15" Style="{StaticResource ButtonPrimary}" FontSize="16" FontFamily="/Font/#G마켓 산스 TTF Medium" Click="closeInstaller">
                 <Button.Effect>
                     <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" BlurRadius="25" Opacity="0.6"/>
                 </Button.Effect>
                 확인
             </Button>
+
+            <Grid Grid.Column="1">
+                
+                <Border Background="#fff" Margin="25" CornerRadius="15">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="0" RenderingBias="Quality" BlurRadius="25" Opacity="0.6"/>
+                    </Border.Effect>
+
+                    <Grid>
+                        <hc:ScrollViewer Margin="15,15,15,65" IsInertiaEnabled="True">
+                            <TextBlock Name="logText" d:Text="여기에 로그가 표시됩니다." FontFamily="/Font/#Pretendard Variable" FontSize="13" TextWrapping="Wrap">
+                                
+                            </TextBlock>
+                        </hc:ScrollViewer>
+                        <StackPanel VerticalAlignment="Bottom" Margin="15">
+                            <TextBlock FontFamily="/Font/#Pretendard Variable" FontSize="14" Margin="0,0,0,5" HorizontalAlignment="Right">
+                                다운로드 : <Run Name="textDownloaded" d:Text="240"></Run>MB / <Run Name="textTotalDownload" d:Text="1024"></Run>MB
+                            </TextBlock>
+                            <ProgressBar Name="mainProgressBar"/>
+                        </StackPanel>
+
+                    </Grid>
+                </Border>
+            </Grid>
         </Grid>
     </Border>
 </Window>
