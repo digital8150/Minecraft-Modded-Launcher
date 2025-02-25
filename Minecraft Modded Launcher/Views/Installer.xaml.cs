@@ -187,9 +187,10 @@ namespace Minecraft_Modded_Launcher.Views
                 // 1. JDK8 다운로드
                 string jdkDownloadUrl = "http://mc2.codingbot.kr/mc2/java8.zip";
                 string tempZipPath = Path.Combine(Path.GetTempPath(), "java8.zip");
-                string extractionPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location); // 실행 파일 위치
+                string extractionPath = AppContext.BaseDirectory; // 실행 파일 위치
+               
 
-                
+
 
                 using (var client = new HttpClient())
                 {
@@ -268,7 +269,7 @@ namespace Minecraft_Modded_Launcher.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"JDK8 설치 중 오류 발생: {ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"JDK8 설치 중 오류 발생\n {ex}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }
