@@ -60,6 +60,14 @@ namespace Minecraft_Modded_Launcher.Views
             await Task.Delay(MillisecondsDelay);
             animationController.BeginAnimation(carouselMain, 0, 1, OpacityProperty, 0.5);
             await Task.Delay(MillisecondsDelay);
+
+            await Task.Delay(MillisecondsDelay);
+            updateButtonState();
+
+        }
+
+        public void updateButtonState()
+        {
             if (Path.Exists(minecraftFolderPath))
             {
                 textMinecraftStatus.Text = "마인크래프트가 설치되어 있습니다.";
@@ -79,13 +87,7 @@ namespace Minecraft_Modded_Launcher.Views
                 textBackupStatus.Text = "MCROHDONG이 설치되어 있지 않습니다.";
                 isMcrohdongInstalled = false;
             }
-            await Task.Delay(MillisecondsDelay);
-            updateButtonState();
 
-        }
-
-        public void updateButtonState()
-        {
             if (isMcrohdongInstalled)
             {
                 buttonInstall.Visibility = Visibility.Collapsed;

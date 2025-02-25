@@ -1,4 +1,5 @@
-﻿using Minecraft_Modded_Launcher.Controllers;
+﻿using FontAwesome6;
+using Minecraft_Modded_Launcher.Controllers;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -37,29 +38,50 @@ namespace Minecraft_Modded_Launcher.Views
             this.Close();
         }
 
+        private void logTextAppend(string content)
+        {
+            Dispatcher.Invoke( () =>
+            {
+                this.logText.Text += content + "\n";
+            });
+        }
+
+        private void updateProgressBar(double value, double downloaded, double total)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                mainProgressBar.Value = value;
+                textDownloaded.Text = downloaded.ToString("F2");
+                textTotalDownload.Text = total.ToString("F2");
+            });
+
+        }
+
         private async void window_loaded(object sender, RoutedEventArgs e)
         {
             animationController.BeginAnimation(borderApplicaion, 0, 1, OpacityProperty);
             await Task.Delay(1000);
             
             await backupMinecraftFolder();
-            spinnerMinecraftBackup.Icon = FontAwesome6.EFontAwesomeIcon.Regular_CircleCheck;
-            spinnerMinecraftBackup.Spin = false;
-            spinnerMinecraftBackup.Foreground = Brushes.Green;
             await installRebuild();
-            spinnerMinecraftInstall.Icon = FontAwesome6.EFontAwesomeIcon.Regular_CircleCheck;
-            spinnerMinecraftInstall.Spin = false;
-            spinnerMinecraftInstall.Foreground = Brushes.Green;
             await instalJDK8();
-            spinnerJavaInstall.Icon = FontAwesome6.EFontAwesomeIcon.Regular_CircleCheck;
-            spinnerJavaInstall.Spin = false;
-            spinnerJavaInstall.Foreground = Brushes.Green;
 
             buttonExit.IsEnabled = true;
             buttonExit.Visibility = Visibility.Visible;
             animationController.BeginAnimation(buttonExit, 0, 1, OpacityProperty);
             Init.application.isMcrohdongInstalled = true;
             Init.application.updateButtonState();
+        }
+
+        private void updateIcon(FontAwesome6.Fonts.FontAwesome fontObject, EFontAwesomeIcon icon, Boolean isSpin, Brush iconBrush)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                fontObject.Icon = icon;
+                fontObject.Spin = isSpin;
+                fontObject.Foreground = iconBrush;
+            });
+
         }
 
 
@@ -85,19 +107,21 @@ namespace Minecraft_Modded_Launcher.Views
 
                     // 5. .minecraft 폴더 이름을 .minecraft_backup으로 변경
                     Directory.Move(minecraftFolderPath, backupFolderPath);
-
+                    logTextAppend($".minecraft 폴더를 백업했습니다 : {backupFolderPath}");
                     
                 }
                 else
                 {
-                    HandyControl.Controls.MessageBox.Show("마인크래프트 폴더가 존재하지 않으므로 백업 하지 않습니다.");
+                    logTextAppend(".minecraft 폴더가 존재하지 않아 백업하지 않습니다.");
                     Directory.CreateDirectory(backupFolderPath);
                 }
+                updateIcon(spinnerMinecraftBackup, EFontAwesomeIcon.Solid_CircleCheck, false, Brushes.Green);
             }
             catch (Exception ex)
             {
 
-                HandyControl.Controls.MessageBox.Show($"백업 중 오류가 발생했습니다.\n{ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                logTextAppend($"백업중 오류가 발생했습니다!\n{ex}");
+                updateIcon(spinnerMinecraftBackup, EFontAwesomeIcon.Solid_TriangleExclamation, false, Brushes.Red);
             }
         }
 
@@ -108,8 +132,9 @@ namespace Minecraft_Modded_Launcher.Views
             if (!Directory.Exists(minecraftFolderPath))
             {
                 // LogText += "Re:Build 파일 다운로드 및 설치를 시작합니다...\n";  // 제거
-                
+                logTextAppend("Re:Build 파일 다운로드 및 설치를 시작합니다...");
 
+                await Task.Delay(500);
                 try
                 {
                     // 1. 서버에서 Re:Build 파일 (minecraft.zip) 다운로드
@@ -140,8 +165,9 @@ namespace Minecraft_Modded_Launcher.Views
 
                                     if (totalBytes.HasValue)
                                     {
-                                        
-                                        // LogText += $"다운로드 중... {downloadedBytes / 1024 / 1024}MB / {(totalBytes / 1024 / 1024)}MB ({ProgressValue:F1}%)\n"; // 제거
+                                        double ProgressValue = (double)downloadedBytes / totalBytes.Value * 100;
+                                        //logTextAppend($"다운로드 중... {downloadedBytes / 1024 / 1024}MB / {(totalBytes / 1024 / 1024)}MB ({ProgressValue:F1}%)");
+                                        updateProgressBar(ProgressValue, (double)downloadedBytes / 1024 / 1024, (double)totalBytes / 1024 / 1024);
                                     }
                                 }
                             }
@@ -150,19 +176,20 @@ namespace Minecraft_Modded_Launcher.Views
 
 
                     // 2. 다운로드한 minecraft.zip 파일의 압축을 .minecraft 폴더에 해제
-                    // LogText += "압축 해제 중...\n"; // 제거
+                    logTextAppend("다운로드 완료! 리빌드를 압축 해제합니다.");
                     await Task.Run(() => ZipFile.ExtractToDirectory(tempZipPath, minecraftFolderPath, true));
 
                     // 3. 임시 파일 삭제
                     File.Delete(tempZipPath);
 
                     // LogText += "Re:Build 파일 설치 완료!\n"; // 제거
-                    HandyControl.Controls.Growl.Info("Re:Build 파일 설치가 완료되었습니다."); // 완료 메시지
+                    logTextAppend("리빌드 설치가 완료되었습니다."); // 완료 메시지
+                    updateIcon(spinnerMinecraftInstall, EFontAwesomeIcon.Solid_CircleCheck, false, Brushes.Green);
                 }
                 catch (Exception ex)
                 {
                     // LogText += $"Re:Build 파일 설치 중 오류 발생: {ex.Message}\n"; // 제거
-                    HandyControl.Controls.MessageBox.Show($"Re:Build 파일 설치 중 오류가 발생했습니다.\n{ex.Message}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                    logTextAppend($"리빌드 설치 중 오류가 발생했습니다\n{ex}");
 
                     //오류 발생시 임시파일 삭제
                     string tempZipPath = Path.Combine(Path.GetTempPath(), "minecraft.zip");
@@ -170,12 +197,14 @@ namespace Minecraft_Modded_Launcher.Views
                     {
                         File.Delete(tempZipPath);
                     }
+                    updateIcon(spinnerMinecraftInstall, EFontAwesomeIcon.Solid_TriangleExclamation, false, Brushes.Red);
                 }
             }
             else
             {
                 // LogText += ".minecraft 폴더가 이미 존재하여 Rebuild를 설치 하지 않았습니다.\n"; // 제거
-                HandyControl.Controls.MessageBox.Show("백업중 오류가 발생하여 리빌드를 설치하지 않았습니다!", "알림", MessageBoxButton.OK, MessageBoxImage.Information);
+                logTextAppend("백업에 오류가 발생하여 Rebuild를 설치 하지 못했습니다.");
+                updateIcon(spinnerMinecraftInstall, EFontAwesomeIcon.Solid_TriangleExclamation, false, Brushes.Red);
             }
         }
 
@@ -184,14 +213,15 @@ namespace Minecraft_Modded_Launcher.Views
         {
             try
             {
+                logTextAppend("JDK8 다운로드를 시작합니다 : http://mc2.codingbot.kr/mc2/java8.zip");
                 // 1. JDK8 다운로드
                 string jdkDownloadUrl = "http://mc2.codingbot.kr/mc2/java8.zip";
                 string tempZipPath = Path.Combine(Path.GetTempPath(), "java8.zip");
                 string extractionPath = AppContext.BaseDirectory; // 실행 파일 위치
-               
 
 
 
+                await Task.Delay(500);
                 using (var client = new HttpClient())
                 {
                     client.Timeout = TimeSpan.FromMinutes(5); // 타임아웃 설정
@@ -216,7 +246,9 @@ namespace Minecraft_Modded_Launcher.Views
 
                                 if (totalBytes.HasValue)
                                 {
-                                    
+                                    double ProgressValue = (double)downloadedBytes / totalBytes.Value * 100;
+                                    //logTextAppend($"다운로드 중... {downloadedBytes / 1024 / 1024}MB / {(totalBytes / 1024 / 1024)}MB ({ProgressValue:F1}%)");
+                                    updateProgressBar(ProgressValue, (double)downloadedBytes / 1024 / 1024, (double)totalBytes / 1024 / 1024);
                                 }
                             }
                         }
@@ -224,6 +256,7 @@ namespace Minecraft_Modded_Launcher.Views
                 }
 
                 // 2. JDK8 압축 해제 (실행 파일 위치에)
+                logTextAppend("다운로드 완료! JDK8을 압축 해제합니다.");
                 await Task.Run(() => ZipFile.ExtractToDirectory(tempZipPath, extractionPath, true)); // 기존 파일 덮어쓰기
                 File.Delete(tempZipPath); // 임시 zip 파일 삭제
 
@@ -261,15 +294,16 @@ namespace Minecraft_Modded_Launcher.Views
                 }
                 else
                 {
-                    MessageBox.Show("launcher_profiles.json 파일을 찾을 수 없습니다.", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
+                    throw new FileLoadException("마인크래프트 설치 프로필 json이 존재하지 않습니다.");
                 }
 
-                HandyControl.Controls.Growl.Info("JDK8 설치 및 설정이 완료되었습니다.");
+                logTextAppend("JDK8 설치를 완료했습니다.");
+                updateIcon(spinnerJavaInstall, EFontAwesomeIcon.Solid_CircleCheck, false, Brushes.Green);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"JDK8 설치 중 오류 발생\n {ex}", "오류", MessageBoxButton.OK, MessageBoxImage.Error);
+                logTextAppend($"JDK8 설치 중 오류가 발생했습니다.\n{ex}");
+                updateIcon(spinnerJavaInstall, EFontAwesomeIcon.Solid_TriangleExclamation, false, Brushes.Red);
             }
         }
     }
